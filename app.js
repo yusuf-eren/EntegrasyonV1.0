@@ -45,7 +45,7 @@ app.get("/view_listings", EtsyController.ViewListings);
 
 app.post("/change_quantity", EtsyController.ChangeQty);
 // Start the server on port 3003
-const port = 3003;
+const port = process.env.PORT || 3003;
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });
