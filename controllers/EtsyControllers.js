@@ -3,6 +3,7 @@ const { get } = require("mongoose");
 const fetch = require("node-fetch");
 const User = require("../models/Users");
 const Listing = require("../models/Listing");
+const { updateOne } = require("../models/Users");
 
 exports.Auth = async (req, res) => {
   // The req.query object has the query params that Etsy authentication sends
@@ -73,6 +74,7 @@ exports.Main = async (req, res) => {
   }
 };
 
+// DATABASE
 exports.GetListing = async (req, res) => {
   const user_id = await req.query.user_id;
   const access_token = await req.query.access_token;
@@ -126,5 +128,28 @@ exports.ViewListings = async (req, res) => {
   res.render("viewListings", {
     listings: listings_of_shop_id,
     listing_count: totalListings,
+    shop_id,
   });
+};
+
+// STOK BİLGİSİ DEĞİŞTİRME
+exports.ChangeQty = async (req, res) => {
+  const qty = req.body.qty;
+  const listing_id = req.query.listing_id;
+  const shop_id = req.query.shop_id;
+  //console.log(`${qty} ${listing_id} ${shop_id}`);
+
+  // VERİTABANI BİLGİSİ DEĞİŞTİRİLDİ
+  const updateOneListing = await Listing.findOneAndUpdate(
+    { listing_id: listing_id },
+    await { quantity: qty }
+  ).then((err) => {
+    if (err) {
+      console.log(err);
+    }
+  });
+
+  // VERİTABANI VE ETSY BAĞLANTISI
+
+  res.redirect(`view_listings?shop_id=${shop_id}&listing_id=${listing_id}`);
 };

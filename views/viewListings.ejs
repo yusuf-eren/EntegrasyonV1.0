@@ -8,8 +8,13 @@
 </head>
 <body>
     <% for(let i = 0; i < listing_count; i++) { %>
-        <h4><%=listings[i]%></h4>
         <h4><%=listings[i].title%></h4>
+        Quantity : <h4><%=listings[i].quantity%></h4>
+        <form action="/change_quantity?shop_id=<%=shop_id%>&listing_id=<%=listings[i].listing_id%>" method="POST">
+            <input type="number" name="qty" id="qty" placeholder= "Current : <%=listings[i].quantity%>">
+            <h1><%=listings[i].listing_id%></h1>
+            <button type="submit" onclick="return alert('Stoklarınız Güncelleniyor..')">Change Quantity</button>
+        </form>
         <h1>-------------</h1>
     <% } %>
 </body>
